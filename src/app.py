@@ -4,6 +4,7 @@ import os
 import json
 import pandas as pd
 from datetime import datetime
+import shutil
 
 # Set the title of the app
 st.title("They Don't Follow You Back")
@@ -77,5 +78,10 @@ if uploaded_file is not None:
                 st.write("Required files are missing.")
     else:     
         st.write(uploaded_file)
+
+# Add a button to end the session and delete all received files
+if st.button("End Session"):
+    shutil.rmtree("data/processed")
+    st.write("Session ended and all files deleted.")
 
 
