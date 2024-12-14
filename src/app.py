@@ -58,10 +58,13 @@ if uploaded_file is not None:
                 # Drop the timestamp column
                 df = df.drop(columns=['timestamp'])
                 
+                # Add a column for user to check if row should be hidden
+                df['hide'] = False
+                
                 st.subheader("Those bastards...")
 
                 # Display DataFrame with links and nice column names
-                st.data_editor(
+                edited_df = st.data_editor(
                     df,
                     column_config={
                         "href": st.column_config.LinkColumn(
@@ -69,19 +72,21 @@ if uploaded_file is not None:
                             display_text="Open Profile"
                         ),
                         "value": "Bastard username",
-                        "date": "Date Followed"
+                        "date": "Date Followed",
+                        "hide": "Hide"
                     },
                     hide_index=True,
                     use_container_width=True
                 )
+
+                if st.button("End Session"):
+                    shutil.rmtree("data/processed")
+                    df = None
+                    st.write("Session ended and all files deleted.")
+            
             else:
                 st.write("Required files are missing.")
     else:     
         st.write(uploaded_file)
-
-# Add a button to end the session and delete all received files
-if st.button("End Session"):
-    shutil.rmtree("data/processed")
-    st.write("Session ended and all files deleted.")
 
 
